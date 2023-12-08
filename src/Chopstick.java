@@ -6,16 +6,12 @@ public class Chopstick {
     }
 
     public void take ( ) throws InterruptedException {
-        try {
-            stick.acquire();
-        } catch (InterruptedException e) {
-            throw e;
-        }
+        stick.acquire();
     }
 
     public void release ( ) {
         stick.release();
     }
 
-    private Semaphore stick = new Semaphore(1);
+    private final Semaphore stick = new Semaphore(1);
 }
