@@ -1,23 +1,30 @@
 public class Philosopher implements Runnable {
 
-    public Philosopher( Table table ) {
+    public Philosopher( Table table, boolean beSilent ) {
         this.table = table;
-        this.rThink = new RandomValues(100, 200, RandomValues.getUniformDistribution());
-        this.rEat = new RandomValues(500, 2000, RandomValues.getUniformDistribution());
+        this.beSilent = beSilent;
+        this.rThink = new RandomValues(20, 100, RandomValues.getUniformDistribution());
+        this.rEat = new RandomValues(10, 30, RandomValues.getUniformDistribution());
         thread = new Thread(this);
         thread.start();
     }
 
+    public Philosopher( Table table ) {
+        this(table, true);
+    }
     @Override
     public void run() {
         while (true) {
             try {
                 long timeThinking = rThink.getLong();
-                System.out.format("Philosopher %s is thinking for %d ms\n", thread.getName(), timeThinking);
+                if (!beSilent)
+                    System.out.format("Philosopher %s is thinking for %d ms\n", getName(), timeThinking);
                 Thread.sleep(timeThinking);
                 int s = table.takeASeat();
                 long timeEating = rEat.getLong();
-                System.out.format("Philosopher %s is eating for %d ms\n", thread.getName(), timeEating);
+                nMeals++;
+                if (!beSilent)
+                    System.out.format("Philosopher %s is eating for %d ms\n", getName(), timeEating);
                 Thread.sleep(timeEating);
                 table.leaveSeat(s);
             }
@@ -39,8 +46,18 @@ public class Philosopher implements Runnable {
         }
     }
 
+    public int getNumberOfMeals () {
+        return nMeals;
+    }
+
+    public String getName () {
+        return thread.getName();
+    }
+
     private final Thread thread;
     private final RandomValues rThink;
     private final RandomValues rEat;
     private final Table table;
+    private int nMeals = 0;
+    private final boolean beSilent;
 }
