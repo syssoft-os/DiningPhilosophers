@@ -10,7 +10,7 @@ class RandomValuesTest {
         final int N = 10000;
         double sum = 0;
         for (int i = 0; i < N; i++) {
-            double v = randomValues.get();
+            double v = randomValues.getDouble();
             sum += v;
             assertTrue(v >= 0 && v <= 1);
         }

@@ -8,13 +8,17 @@ public class RandomValues {
         this.distributionFunction = distributionFunction;
     }
 
-    public double get() {
+    public double getDouble() {
         double v = distributionFunction.get();
         if (v < 0 || v > 1) {
             System.err.println("Distribution function must return a value between 0 and 1");
             System.exit(-1);
         }
         return min_value + Math.random() * (max_value - min_value);
+    }
+
+    public long getLong () {
+        return (long) getDouble();
     }
 
     public static Supplier<Double> getUniformDistribution() {
