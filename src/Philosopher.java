@@ -4,7 +4,7 @@ public class Philosopher implements Runnable {
         this.table = table;
         this.beSilent = beSilent;
         this.rThink = new RandomValues(20, 100, RandomValues.getUniformDistribution());
-        this.rEat = new RandomValues(10, 30, RandomValues.getUniformDistribution());
+        this.rEat = new RandomValues(10, 30, RandomValues.getNormalDistribution(0.5,0.1 ));
         thread = new Thread(this);
         thread.start();
     }

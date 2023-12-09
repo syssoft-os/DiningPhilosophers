@@ -22,7 +22,20 @@ public class RandomValues {
     }
 
     public static Supplier<Double> getUniformDistribution() {
-        return () -> Math.random();
+        return Math::random;
+    }
+    public static Supplier<Double> getNormalDistribution(double mean, double stdDev) {
+        // Using the Box-Muller transform
+        return () -> {
+            double u, v, s;
+            do {
+                u = Math.random() * 2 - 1;
+                v = Math.random() * 2 - 1;
+                s = u * u + v * v;
+            } while (s >= 1 || s == 0);
+            double mul = Math.sqrt(-2.0 * Math.log(s) / s);
+            return mean + stdDev * u * mul;
+        };
     }
 
     private double min_value;

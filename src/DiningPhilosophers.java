@@ -18,6 +18,7 @@ public class DiningPhilosophers {
 
         long startTime = System.currentTimeMillis();
         long loopTime = System.currentTimeMillis();
+        // Check for deadlock every second by comparing the minimum number of meals eaten so far
         int minimalNumberOfMeals_lastRound = Integer.MAX_VALUE;
         while (loopTime - startTime < (long) nSeconds * 1000) {
             Thread.sleep(1000);
