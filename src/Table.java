@@ -28,9 +28,11 @@ public class Table {
             queue.enqueue();
             seat = findAndOccupyEmptySeat();
         }
-        chopsticks[seat].take();
-        Thread.sleep(100); // to make deadlock more likely
-        chopsticks[(seat + 1) % size].take();
+        synchronized (this) {
+            chopsticks[seat].take();
+            Thread.sleep(100); // to make deadlock more likely
+            chopsticks[(seat + 1) % size].take();
+        }
         return seat;
     }
 
