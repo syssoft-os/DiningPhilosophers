@@ -29,7 +29,6 @@ public class Table {
             seat = findAndOccupyEmptySeat();
         }
         chopsticks[seat].take();
-        Thread.sleep(100); // to make deadlock more likely
         chopsticks[(seat + 1) % size].take();
         return seat;
     }
@@ -37,7 +36,6 @@ public class Table {
     public void leaveSeat ( int s ) throws InterruptedException {
         assert(seats[s].isOccupied());
         chopsticks[s].release();
-        Thread.sleep(100); // to make deadlock more likely
         chopsticks[(s + 1) % size].release();
         seats[s].release();
         queue.dequeue();
