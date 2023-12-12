@@ -1,9 +1,12 @@
+import java.util.concurrent.Semaphore;
+
 public class Table {
 
     public Table ( int size ) {
         assert(size > 1);
         this.size = size;
         this.queue = new WaitingQueue();
+        doorman = new Semaphore(size - 1);
         seats = new Seat[size];
         chopsticks = new Chopstick[size];
         for (int i = 0; i < size; i++) {
@@ -23,6 +26,7 @@ public class Table {
     }
 
     public int takeASeat () throws InterruptedException {
+        doorman.acquire();
         int seat = findAndOccupyEmptySeat();
         while (seat == -1) {
             queue.enqueue();
@@ -47,10 +51,13 @@ public class Table {
         chopsticks[(s + 1) % size].release();
         seats[s].release();
         queue.dequeue();
+        doorman.release();
     }
 
     private final int size;
     private final WaitingQueue queue;
     private final Seat[] seats;
     private final Chopstick[] chopsticks;
+
+    private final Semaphore doorman;
 }
