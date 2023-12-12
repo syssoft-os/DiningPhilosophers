@@ -28,14 +28,18 @@ public class Table {
             queue.enqueue();
             seat = findAndOccupyEmptySeat();
         }
-        chopsticks[seat].take();
-        chopsticks[(seat + 1) % size].take();
+        synchronized (this) {
+            chopsticks[seat].take();
+            Thread.sleep(100); // to make deadlock more likely
+            chopsticks[(seat + 1) % size].take();
+        }
         return seat;
     }
 
     public void leaveSeat ( int s ) throws InterruptedException {
         assert(seats[s].isOccupied());
         chopsticks[s].release();
+        Thread.sleep(100); // to make deadlock more likely
         chopsticks[(s + 1) % size].release();
         seats[s].release();
         queue.dequeue();
