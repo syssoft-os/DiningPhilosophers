@@ -32,15 +32,9 @@ public class Table {
             queue.enqueue();
             seat = findAndOccupyEmptySeat();
         }
-        if (seat % 2 == 0) {
-            chopsticks[seat].take();
-            Thread.sleep(100); // to make deadlock more likely
-            chopsticks[(seat + 1) % size].take();
-        } else {
-            chopsticks[(seat + 1) % size].take();
-            Thread.sleep(100); // to make deadlock more likely
-            chopsticks[seat].take();
-        }
+        chopsticks[seat].take();
+        Thread.sleep(100); // to make deadlock more likely
+        chopsticks[(seat + 1) % size].take();
         return seat;
     }
 
